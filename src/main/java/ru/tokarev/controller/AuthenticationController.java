@@ -40,7 +40,8 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody AuthenticationRequestDto requestDto) {
 
-        log.info("POST request for /login with data {}", requestDto);
+        log.info("POST request for /login with username {} and password {}", requestDto.getUsername(),
+                requestDto.getPassword());
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
@@ -58,7 +59,9 @@ public class AuthenticationController {
         LoginResponseDto loginResponseDto = new LoginResponseDto(jwt, userDetails.getId(), userDetails.getUsername(),
                 userDetails.getEmail(), roles);
 
-        log.info("Response for POST request with data {}", loginResponseDto);
+        log.info("Response for POST request with data: {}, {}, {}, {}, {}, {}",
+                loginResponseDto.getId(), loginResponseDto.getUsername(), loginResponseDto.getEmail(),
+                loginResponseDto.getToken(), loginResponseDto.getRoles(), loginResponseDto.getType());
 
         return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }

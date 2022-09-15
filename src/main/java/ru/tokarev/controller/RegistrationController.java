@@ -34,13 +34,18 @@ public class RegistrationController {
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> signup(@RequestBody SignupDto signupDto) {
 
-        log.info("POST request for /signup with data {}", signupDto);
+        log.info("POST request for /signup with data: username {}, firstName {}, lastName {}, email {}, password {}",
+                signupDto.getUsername(), signupDto.getFirstName(), signupDto.getLastName(),
+                signupDto.getEmail(), signupDto.getPassword());
 
         User user = convertToUserEntity(signupDto);
         User createdUser = userService.createUser(user);
         UserDto createdUserDto = convertToUserDto(createdUser);
 
-        log.info("Response for POST request with data {}", createdUserDto);
+        log.info("Response for POST request with data: id {}, username {}, firstName {}, lastName {}, email {}," +
+                " password {}, roleId {}", createdUserDto.getId(), createdUserDto.getUsername(),
+                createdUserDto.getFirstName(), createdUserDto.getLastName(), createdUserDto.getEmail(),
+                createdUserDto.getPassword(), createdUserDto.getRoleDto().getId());
 
         return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
     }

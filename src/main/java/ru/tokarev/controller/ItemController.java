@@ -45,6 +45,11 @@ public class ItemController {
         List<ItemDto> itemDtoList = MapperUtil.convertList(itemList, this::convertToItemDto);
 
         log.info("Response for GET request for /items with data {}", itemDtoList);
+        for (Item item : itemList) {
+            log.info("serialNumber {}, productId {}, price {}, marketplaceId {} dateStart {}, dateEnd {}",
+                    item.getSerialNumber(), item.getProduct().getId(), item.getPrice(), item.getMarketplace().getId(),
+                    item.getDateStart(), item.getDateEnd());
+        }
 
         return new ResponseEntity<>(itemDtoList, HttpStatus.OK);
     }
@@ -58,7 +63,10 @@ public class ItemController {
         Item item = itemService.getBySerialNumber(serialNumber);
         ItemDto itemDto = convertToItemDto(item);
 
-        log.info("Response for GET request for /items/{} with data {}", serialNumber, itemDto);
+        log.info("Response for GET request for /items/{} with itemDto:" +
+                " serialNumber {}, productId {}, price {}, marketplaceId {} dateStart {}, dateEnd {}", serialNumber,
+                item.getSerialNumber(), item.getProduct().getId(), item.getPrice(), item.getMarketplace().getId(),
+                item.getDateStart(), item.getDateEnd());
 
         return new ResponseEntity<>(itemDto, HttpStatus.OK);
     }
@@ -91,6 +99,11 @@ public class ItemController {
         }
 
         log.info("Response for GET request for /check_price_dynamic with data: {}", productPriceDifferenceDtos);
+        for(ProductPriceDifferenceDto productPriceDifferenceDto : productPriceDifferenceDtos) {
+            log.info("productName {}, marketplaceName {}, priceByDayDtoList {}",
+                    productPriceDifferenceDto.getProductName(), productPriceDifferenceDto.getMarketplaceName(),
+                    productPriceDifferenceDto.getPriceByDayDtoList());
+        }
 
         return new ResponseEntity<>(productPriceDifferenceDtos, HttpStatus.OK);
     }
@@ -118,6 +131,10 @@ public class ItemController {
         }
 
         log.info("Response for GET request for /compare_prices with data: {}", productPriceComparingDtoList);
+        for(ProductPriceComparingDto productPriceComparingDto : productPriceComparingDtoList) {
+            log.info("productName {} and marketplacePriceMap {}", productPriceComparingDto.getProductName(),
+                    productPriceComparingDto.getMarketplaceEverydayPricesMap());
+        }
 
         return new ResponseEntity<>(productPriceComparingDtoList, HttpStatus.OK);
     }
@@ -126,7 +143,10 @@ public class ItemController {
     public ResponseEntity<ItemDto> createItem(
             @RequestBody ItemDto itemDto) {
 
-        log.info("POST request for /items with data {}", itemDto);
+        log.info("POST request for /items with data:" +
+                " productId {}, price {}, marketplaceId {} dateStart {}, dateEnd {}",
+                itemDto.getProductForItemDto().getId(), itemDto.getPrice(), itemDto.getMarketPlaceDto().getId(),
+                itemDto.getDateStart(), itemDto.getDateEnd());
 
         if (itemDto.getDateEnd().isBefore((itemDto.getDateStart()))) {
             throw new ItemBadRequestException("Date end cannot be before date start");
@@ -136,7 +156,12 @@ public class ItemController {
         Item createdItem = itemService.createItem(item);
         ItemDto createdItemDto = convertToItemDto(createdItem);
 
-        log.info("Response for POST request for /items with data {}", createdItemDto);
+        log.info("Response for POST request for /items with data:  " +
+                "serialNumber {}, productId {}, price {}, marketplaceId {} dateStart {}, dateEnd {}",
+                createdItemDto.getSerialNumber(),
+                createdItemDto.getProductForItemDto().getId(), createdItemDto.getPrice(),
+                createdItemDto.getMarketPlaceDto().getId(),
+                createdItemDto.getDateStart(), createdItemDto.getDateEnd());
 
         return new ResponseEntity<>(createdItemDto, HttpStatus.CREATED);
     }
@@ -146,6 +171,11 @@ public class ItemController {
             @RequestBody List<ItemDto> itemDtoList) {
 
         log.info("POST request for /items/import with data {}", itemDtoList);
+        for(ItemDto itemDto: itemDtoList) {
+            log.info("productId {}, price {}, marketplaceId {} dateStart {}, dateEnd {}",
+                    itemDto.getProductForItemDto().getId(), itemDto.getPrice(),
+                    itemDto.getMarketPlaceDto().getId(), itemDto.getDateStart(), itemDto.getDateEnd());
+        }
 
         for (ItemDto itemDto : itemDtoList) {
             if (itemDto.getDateEnd().isBefore((itemDto.getDateStart()))) {
@@ -161,6 +191,11 @@ public class ItemController {
                 MapperUtil.convertList(createdProductsOnMarketList, this::convertToItemDto);
 
         log.info("Response for POST request for /items/import with data {}", createdProductsOnMarketDtoList);
+        for(ItemDto itemDto: createdProductsOnMarketDtoList) {
+            log.info("serialNumber {}, productId {}, price {}, marketplaceId {} dateStart {}, dateEnd {}",
+                    itemDto.getSerialNumber(), itemDto.getProductForItemDto().getId(), itemDto.getPrice(),
+                    itemDto.getMarketPlaceDto().getId(), itemDto.getDateStart(), itemDto.getDateEnd());
+        }
 
         return new ResponseEntity<>(createdProductsOnMarketDtoList, HttpStatus.CREATED);
     }

@@ -40,6 +40,10 @@ public class ProductController {
         List<ProductDto> productDtoList = MapperUtil.convertList(productList, this::convertToProductDto);
 
         log.info("Response for GET request for /products with data {}", productDtoList);
+        for(ProductDto productDto : productDtoList) {
+            log.info("id {}, name {}, categoryId {}", productDto.getId(),
+                    productDto.getName(), productDto.getCategoryDto().getId());
+        }
 
         return new ResponseEntity<>(productDtoList, HttpStatus.OK);
     }
@@ -52,7 +56,8 @@ public class ProductController {
         Product product = productService.getById(id);
         ProductDto productDto = convertToProductDto(product);
 
-        log.info("Response for GET request for /products/{} with data {}", id, productDto);
+        log.info("Response for GET request for /products/{} with data: id {}, name {}, categoryId {} ", id,
+                productDto.getId(), productDto.getName(), productDto.getCategoryDto().getId());
 
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
@@ -60,13 +65,15 @@ public class ProductController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
 
-        log.info("POST request for /products with data {}", productDto);
+        log.info("POST request for /products with data: name {}, categoryId {}",
+                productDto.getName(), productDto.getId());
 
         Product product = convertToProductEntity(productDto);
         Product createdProduct = productService.createProduct(product);
         ProductDto createdProductDto = convertToProductDto(createdProduct);
 
-        log.info("Response for POST request for /products with data {}", createdProductDto);
+        log.info("Response for POST request for /products with data: name {}, categoryId {}",
+                createdProductDto.getName(), createdProductDto.getId());
 
         return new ResponseEntity<>(createdProductDto, HttpStatus.CREATED);
     }
@@ -75,12 +82,19 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> createProducts(@RequestBody List<ProductDto> productDtoList) {
 
         log.info("POST request for /products/import with data {}", productDtoList);
+        for(ProductDto productDto : productDtoList) {
+            log.info("name {}, categoryId {}", productDto.getName(), productDto.getCategoryDto().getId());
+        }
 
         List<Product> productList = MapperUtil.convertList(productDtoList, this::convertToProductEntity);
         List<Product> createdProductList = productService.createProducts(productList);
         List<ProductDto> createdProductDtoList = MapperUtil.convertList(createdProductList, this::convertToProductDto);
 
         log.info("Response for POST request for /products/import with data {}", createdProductDtoList);
+        for(ProductDto productDto : createdProductDtoList) {
+            log.info("id {}, name {}, categoryId {}",
+                    productDto.getId(), productDto.getName(), productDto.getCategoryDto().getId());
+        }
 
         return new ResponseEntity<>(createdProductDtoList, HttpStatus.CREATED);
     }
@@ -88,13 +102,16 @@ public class ProductController {
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
 
-        log.info("PATCH request for /products/{} with data {}", id, productDto);
+        log.info("PATCH request for /products/{} with data: name {}, categoryId {}",
+                id, productDto.getName(), productDto.getCategoryDto().getId());
 
         Product product = convertToProductEntity(productDto);
         Product updatedProduct = productService.updateProduct(id, product);
         ProductDto updatedProductDto = convertToProductDto(updatedProduct);
 
-        log.info("Response for PATCH request for /products/{} with data {}", id, updatedProductDto);
+        log.info("Response for PATCH request for /products/{} with data: id {}, name {}, categoryId {}",
+                id, updatedProductDto.getId(), updatedProductDto.getName(),
+                updatedProductDto.getCategoryDto().getId());
 
         return new ResponseEntity<>(updatedProductDto, HttpStatus.OK);
     }

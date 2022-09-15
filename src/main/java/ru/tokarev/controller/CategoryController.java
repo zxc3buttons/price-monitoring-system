@@ -35,6 +35,9 @@ public class CategoryController {
         List<CategoryDto> categoryDtoList = MapperUtil.convertList(categoryList, this::convertToCategoryDto);
 
         log.info("Response for GET request /categories with data {}", categoryDtoList);
+        for(CategoryDto categoryDto: categoryDtoList) {
+            log.info("{}, {}", categoryDto.getId(), categoryDto.getName());
+        }
 
         return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
     }
@@ -44,7 +47,7 @@ public class CategoryController {
         Category category = categoryService.getById(id);
         CategoryDto categoryDto = convertToCategoryDto(category);
 
-        log.info("Response for GET request /categories/{} with data {}", id, categoryDto);
+        log.info("Response for GET request /categories/{} with data {}", id, categoryDto.getName());
 
         return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
@@ -52,13 +55,14 @@ public class CategoryController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
 
-        log.info("POST request /categories with data {}", categoryDto);
+        log.info("POST request /categories with data {}", categoryDto.getName());
 
         Category category = convertToCategoryEntity(categoryDto);
         Category createdCategory = categoryService.createCategory(category);
         CategoryDto createdCategoryDto = convertToCategoryDto(createdCategory);
 
-        log.info("Response for POST request /categories with data {}", createdCategoryDto);
+        log.info("Response for POST request /categories with data {}, {}",
+                createdCategoryDto.getId(), createdCategoryDto.getName());
 
         return new ResponseEntity<>(createdCategoryDto, HttpStatus.CREATED);
     }
@@ -68,6 +72,9 @@ public class CategoryController {
             @RequestBody List<CategoryDto> categoryDtoList) {
 
         log.info("POST request /categories/import with data {}", categoryDtoList);
+        for(CategoryDto categoryDto: categoryDtoList) {
+            log.info("{}", categoryDto.getName());
+        }
 
         List<Category> categoryList = MapperUtil.convertList(categoryDtoList, this::convertToCategoryEntity);
         List<Category> createdCategoryList = categoryService.createCategories(categoryList);
@@ -75,6 +82,9 @@ public class CategoryController {
                 createdCategoryList, this::convertToCategoryDto);
 
         log.info("Response for POST request /categories/import with data {}", createdCategoryDtoList);
+        for(CategoryDto categoryDto: categoryDtoList) {
+            log.info("{}, {}", categoryDto.getId(), categoryDto.getName());
+        }
 
         return new ResponseEntity<>(createdCategoryDtoList, HttpStatus.CREATED);
     }
@@ -82,13 +92,13 @@ public class CategoryController {
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
 
-        log.info("PATCH request /categories/{} with data {}", id, categoryDto);
+        log.info("PATCH request /categories/{} with data {}", id, categoryDto.getName());
 
         Category category = convertToCategoryEntity(categoryDto);
         Category updatedCategory = categoryService.updateCategory(id, category);
         CategoryDto updatedCategoryDto = convertToCategoryDto(updatedCategory);
 
-        log.info("Response for PATCH request /categories/{} with data {}", id, updatedCategoryDto);
+        log.info("Response for PATCH request /categories/{} with data {}", id, updatedCategoryDto.getName());
 
         return new ResponseEntity<>(updatedCategoryDto, HttpStatus.OK);
     }

@@ -37,6 +37,9 @@ public class MarketPlaceController {
                 convertList(marketplaceList, this::convertToMarketPlaceDto);
 
         log.info("Response for GET request /marketplaces with data {}", marketPlaceDtoList);
+        for(MarketPlaceDto marketPlaceDto : marketPlaceDtoList) {
+            log.info("id {}, name {}", marketPlaceDto.getId(), marketPlaceDto.getName());
+        }
 
         return new ResponseEntity<>(marketPlaceDtoList, HttpStatus.OK);
     }
@@ -49,7 +52,8 @@ public class MarketPlaceController {
         Marketplace marketPlace = marketPlaceService.getById(id);
         MarketPlaceDto marketPlaceDto = convertToMarketPlaceDto(marketPlace);
 
-        log.info("Response for GET request /marketplaces with data {}", marketPlaceDto);
+        log.info("Response for GET request /marketplaces with data: id {}, name {}",
+                marketPlaceDto.getId(), marketPlaceDto.getName());
 
         return new ResponseEntity<>(marketPlaceDto, HttpStatus.OK);
     }
@@ -57,13 +61,14 @@ public class MarketPlaceController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MarketPlaceDto> createMarketPlace(@RequestBody MarketPlaceDto marketPlaceDto) {
 
-        log.info("POST request /marketplaces with data {}", marketPlaceDto);
+        log.info("POST request /marketplaces with data: name {}", marketPlaceDto.getName());
 
         Marketplace marketPlace = convertToMarketPlaceEntity(marketPlaceDto);
         Marketplace createdMarketplace = marketPlaceService.createMarketPlace(marketPlace);
         MarketPlaceDto createdMarketPlaceDto = convertToMarketPlaceDto(createdMarketplace);
 
-        log.info("Response for POST request /marketplaces with data {}", createdMarketPlaceDto);
+        log.info("Response for POST request /marketplaces with data: id {}, name {}",
+                createdMarketPlaceDto.getId(), createdMarketPlaceDto.getName());
 
         return new ResponseEntity<>(createdMarketPlaceDto, HttpStatus.CREATED);
     }
@@ -73,6 +78,9 @@ public class MarketPlaceController {
             @RequestBody List<MarketPlaceDto> marketPlaceDtoList) {
 
         log.info("POST request /marketplaces with data {}", marketPlaceDtoList);
+        for(MarketPlaceDto marketPlaceDto : marketPlaceDtoList) {
+            log.info("name {}", marketPlaceDto.getName());
+        }
 
         List<Marketplace> marketplaceList = MapperUtil.convertList(marketPlaceDtoList, this::convertToMarketPlaceEntity);
         List<Marketplace> createdMarketplaceList = marketPlaceService.createMarketPlaces(marketplaceList);
@@ -80,6 +88,9 @@ public class MarketPlaceController {
                 createdMarketplaceList, this::convertToMarketPlaceDto);
 
         log.info("Response for POST request /marketplaces with data {}", createdMarketplaceDtoList);
+        for(MarketPlaceDto marketPlaceDto : createdMarketplaceDtoList) {
+            log.info("id {}, name {}", marketPlaceDto.getId(), marketPlaceDto.getName());
+        }
 
         return new ResponseEntity<>(createdMarketplaceDtoList, HttpStatus.CREATED);
     }
@@ -88,13 +99,13 @@ public class MarketPlaceController {
     public ResponseEntity<MarketPlaceDto> updateMarketPlace(@PathVariable Long id,
                                                             @RequestBody MarketPlaceDto marketPlaceDto) {
 
-        log.info("PATCH request /marketplaces/{} with data {}", id, marketPlaceDto);
+        log.info("PATCH request /marketplaces/{} with data: name {}", id, marketPlaceDto.getName());
 
         Marketplace marketPlace = convertToMarketPlaceEntity(marketPlaceDto);
         Marketplace updatedMarketplace = marketPlaceService.updateMarketPlace(id, marketPlace);
         MarketPlaceDto updatedMarketPlaceDto = convertToMarketPlaceDto(updatedMarketplace);
 
-        log.info("Response for PATCH request /marketplaces/{} with data {}", id, marketPlaceDto);
+        log.info("Response for PATCH request /marketplaces/{} with data: name {}", id, marketPlaceDto.getName());
 
         return new ResponseEntity<>(updatedMarketPlaceDto, HttpStatus.OK);
     }

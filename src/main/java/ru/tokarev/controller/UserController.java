@@ -39,6 +39,11 @@ public class UserController {
         List<UserDto> userDtoList = MapperUtil.convertList(userList, this::convertToUserDto);
 
         log.info("Response for GET request for /users with data {}", userDtoList);
+        for(UserDto userDto : userDtoList) {
+            log.info("id {}, username {}, firstName {}, lastName {}, email {}, password {}, roleId {}",
+                    userDto.getId(), userDto.getUsername(), userDto.getFirstName(), userDto.getLastName(),
+                    userDto.getEmail(), userDto.getPassword(), userDto.getRoleDto().getId());
+        }
 
         return new ResponseEntity<>(userDtoList, HttpStatus.OK);
     }
@@ -51,7 +56,10 @@ public class UserController {
         User user = userService.getById(id);
         UserDto userDto = convertToUserDto(user);
 
-        log.info("Response for GET request for /users/{} with data {}", id, userDto);
+        log.info("Response for GET request for /users/{} with data:" +
+                " id {}, username {}, firstName {}, lastName {}, email {}, password {}, roleId {}", id,
+                userDto.getId(), userDto.getUsername(), userDto.getFirstName(), userDto.getLastName(),
+                userDto.getEmail(), userDto.getPassword(), userDto.getRoleDto().getId());
 
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
@@ -59,13 +67,20 @@ public class UserController {
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
 
-        log.info("PATCH request for /users/{} with data {}", id, userDto);
+        log.info("PATCH request for /users/{} with data:" +
+                " username {}, firstName {}, lastName {}, email {}, password {}, roleId {}", id,
+                userDto.getUsername(), userDto.getFirstName(), userDto.getLastName(),
+                userDto.getEmail(), userDto.getPassword(), userDto.getRoleDto().getId());
 
         User user = convertToUserEntity(userDto);
         User updatedUser = userService.updateUser(id, user);
         UserDto updatedUserDto = convertToUserDto(updatedUser);
 
-        log.info("Response for PATCH request for /users/{} with data {}", id, updatedUserDto);
+        log.info("Response for PATCH request for /users/{} with data:" +
+                " id {}, username {}, firstName {}, lastName {}, email {}, password {}, roleId {}", id,
+                updatedUserDto.getId(), updatedUserDto.getUsername(), updatedUserDto.getFirstName(),
+                updatedUserDto.getLastName(), updatedUser.getEmail(), updatedUser.getPassword(),
+                updatedUserDto.getRoleDto().getId());
 
         return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
     }
@@ -73,13 +88,20 @@ public class UserController {
     @PatchMapping(value = "/{id}/update_role", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> updateUserRole(@PathVariable Long id, @RequestBody UserDto userDto) {
 
-        log.info("PATCH request for /users/{}/update_role with data {}", id, userDto);
+        log.info("PATCH request for /users/{}/update_role with data:" +
+                " username {}, firstName {}, lastName {}, email {}, password {}, roleId {}", id,
+                userDto.getUsername(), userDto.getFirstName(), userDto.getLastName(),
+                userDto.getEmail(), userDto.getPassword(), userDto.getRoleDto().getId());
 
         User user = convertToUserEntity(userDto);
         User updatedUser = userService.updateUserRole(id, user);
         UserDto updatedUserDto = convertToUserDto(updatedUser);
 
-        log.info("Response for PATCH request for /users/{}/update_role with data {}", id, updatedUserDto);
+        log.info("Response for PATCH request for /users/{}/update_role with data:" +
+                        " id {}, username {}, firstName {}, lastName {}, email {}, password {}, roleId {}", id,
+                updatedUserDto.getId(), updatedUserDto.getUsername(), updatedUserDto.getFirstName(),
+                updatedUserDto.getLastName(), updatedUser.getEmail(), updatedUser.getPassword(),
+                updatedUserDto.getRoleDto().getId());
 
         return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
     }
