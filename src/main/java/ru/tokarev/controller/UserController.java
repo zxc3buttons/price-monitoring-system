@@ -85,7 +85,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUserDto, HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/{id}/update_role", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}/update-role", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> updateUserRole(@PathVariable Long id, @RequestBody UserDto userDto) {
 
         log.info("PATCH request for /users/{}/update_role with data:" +
