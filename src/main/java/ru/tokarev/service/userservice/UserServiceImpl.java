@@ -10,6 +10,7 @@ import ru.tokarev.dao.roledao.RoleDao;
 import ru.tokarev.dao.userdao.UserDao;
 import ru.tokarev.entity.Role;
 import ru.tokarev.entity.User;
+import ru.tokarev.exception.roleexception.RoleNotFoundException;
 import ru.tokarev.exception.userexception.UserBadRequestException;
 import ru.tokarev.exception.userexception.UserExistsException;
 import ru.tokarev.exception.userexception.UserNotFoundException;
@@ -73,6 +74,7 @@ public class UserServiceImpl implements UserService {
 
         Role role = new Role();
         role.setId(ROLE_UNDEFINED);
+        role.setName("ROLE_UNDEFINED");
         user.setRole(role);
 
         user.setCreated(new Date());

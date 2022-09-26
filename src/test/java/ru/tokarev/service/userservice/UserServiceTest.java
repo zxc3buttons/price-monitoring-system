@@ -75,7 +75,8 @@ class UserServiceTest {
 
         //arrange
         User userToCreate = new User(1L, "oleg", "Oleg", "Tokarev",
-                "oleg@mail.ru", passwordEncoder.encode("1234qwer"), new Role(3L, "UNDEFINED"),
+                "oleg@mail.ru", passwordEncoder.encode("1234qwer"), new Role(3L,
+                "ROLE_UNDEFINED"),
                 new Date(), new Date());
         given(userDao.create(userToCreate)).willReturn(Optional.of(userToCreate));
 
