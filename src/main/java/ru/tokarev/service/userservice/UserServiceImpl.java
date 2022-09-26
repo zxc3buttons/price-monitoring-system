@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final static Long ROLE_UNDEFINED = 103L;
+    private final Long ROLE_UNDEFINED = 103L;
 
     @Autowired
     public void setDao(UserDao<User> userDao, RoleDao<Role> roleDao) {
@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (user.getLastName() != null && !user.getLastName().isEmpty()) {
-            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
         }
 
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {

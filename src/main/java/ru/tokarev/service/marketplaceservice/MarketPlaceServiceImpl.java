@@ -57,7 +57,7 @@ public class MarketPlaceServiceImpl implements MarketPlaceService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional
     public List<Marketplace> createMarketPlaces(List<Marketplace> marketplaceList) {
 
